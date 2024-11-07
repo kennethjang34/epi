@@ -3,13 +3,25 @@ from typing import List
 from test_framework import generic_test, test_utils
 
 
+# TC: O(n* 2^n), SC: O(n* 2^n)
 def generate_power_set(input_set: List[int]) -> List[List[int]]:
-    # TODO - you fill in here.
-    return []
+    if len(input_set) == 0:
+        return [[]]
+    el = input_set[0]
+    subsets = generate_power_set(input_set[1:])
+    return [
+        [el] + subset if is_with else subset
+        for subset in subsets
+        for is_with in [True, False]
+    ]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(
-        generic_test.generic_test_main('power_set.py', 'power_set.tsv',
-                                       generate_power_set,
-                                       test_utils.unordered_compare))
+        generic_test.generic_test_main(
+            "power_set.py",
+            "power_set.tsv",
+            generate_power_set,
+            test_utils.unordered_compare,
+        )
+    )

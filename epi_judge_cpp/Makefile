@@ -1,3 +1,21 @@
+#
+# ifeq ($(shell uname),Darwin)
+#     EXT := dylib
+# else
+#     EXT := so
+# endif
+# #  
+# all: target/debug/libepi_judge_cpp.$(EXT)
+# 	g++ src/main.cpp -L ./target/debug/ -lepi_judge_cpp -o run
+# 	LD_LIBRARY_PATH=./target/debug/ ./run
+#  
+# target/debug/libepi_judge_cpp.$(EXT): src/lib.rs Cargo.toml
+# 	cargo build
+#  
+# clean:
+# 	rm -rf target
+# 	rm -rf run
+#
 # Compile and run by "make <program_name>"
 # For example, typing "make parity" in your terminal will compile and run parity.cc.
 #
@@ -6,12 +24,15 @@
 BUILD_DIR := cpp_build
 SRC_DIR := .
 TEST_DATA_DIR := ../test_data
+# LD_LIBRARY_PATH := ./target/debug/ ./run
 
 # Modify this line if you want to pass custom arguments
 PROGRAM_ARGS := --test-data-dir $(TEST_DATA_DIR) 
 
-CXX_COMPILER := g++
+CXX_COMPILER := clang++
 CXX_FLAGS := -std=c++14 -pthread -Werror -Wno-unused-variable -Wno-sign-compare
+# CXX_FLAGS := -std=c++14 -pthread -Werror -Wno-unused-variable -Wno-sign-compare -L ./target/debug/ -lepi_judge_cpp
+# CXX_FLAGS := -std=c++14 -pthread  -L ./target/debug/ -lepi_judge_cpp
 CXX_FLAGS_DEBUG := $(CXX_FLAGS) -g -O0
 
 LAST_MODIFIED_CXX_FILE = $(shell ls -rt $(SRC_DIR)/*\.cc | tail -1)
@@ -2449,5 +2470,7 @@ all: \
 
 clean:
 	rm -r $(BUILD_DIR)
+	rm -rf target
+	rm -rf run
 
 .PHONY: all clean

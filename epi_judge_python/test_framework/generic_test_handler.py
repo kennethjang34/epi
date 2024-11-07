@@ -3,13 +3,14 @@ import json
 import math
 
 from test_framework import test_utils
-from test_framework.binary_tree_utils import (assert_equal_binary_trees,
-                                              is_object_tree_type)
+from test_framework.binary_tree_utils import (
+    assert_equal_binary_trees,
+    is_object_tree_type,
+)
 from test_framework.serialization_traits import VoidTrait, get_trait
 from test_framework.test_failure import PropertyName, TestFailure
 from test_framework.test_output import TestOutput
-from test_framework.test_utils import (filter_bracket_comments,
-                                       has_executor_hook)
+from test_framework.test_utils import filter_bracket_comments, has_executor_hook
 from test_framework.timed_executor import TimedExecutor
 
 
@@ -32,14 +33,16 @@ class GenericTestHandler:
     In case of any other exception raised by the tested function,
     the test program is terminated.
     """
+
     def __init__(self, func, comp):
         self._func = func
         self._has_executor_hook = has_executor_hook(func)
         self._param_traits = None
         self._param_names = [
-            p.name for p in inspect.signature(self._func).parameters.values()
+            p.name
+            for p in inspect.signature(self._func).parameters.values()
             if p.default is inspect.Parameter.empty
-        ][1 if self._has_executor_hook else 0:]
+        ][1 if self._has_executor_hook else 0 :]
         self._comp = comp
         self._ret_value_trait = None
 
@@ -74,12 +77,15 @@ class GenericTestHandler:
         :return: list, that contains [result of comparison of expected and result, expected, result].
                  Two last entries are omitted in case of the void return type
         """
-        expected_param_count = len(
-            self._param_traits) + (0 if self.expected_is_void() else 1)
+        expected_param_count = len(self._param_traits) + (
+            0 if self.expected_is_void() else 1
+        )
         if len(test_args) != expected_param_count:
             raise RuntimeError(
-                'Invalid argument count: expected {}, actual {}'.format(
-                    expected_param_count, len(test_args)))
+                "Invalid argument count: expected {}, actual {}".format(
+                    expected_param_count, len(test_args)
+                )
+            )
 
         parsed = [
             param_trait.parse(json.loads(test_arg))
@@ -115,19 +121,21 @@ class GenericTestHandler:
             comparison_result = expected == result
 
         if not comparison_result:
-            raise TestFailure()\
-                .with_property(PropertyName.EXPECTED, expected)\
-                .with_property(PropertyName.RESULT, result)
+            raise TestFailure().with_property(
+                PropertyName.EXPECTED, expected
+            ).with_property(PropertyName.RESULT, result)
 
     def metric_names(self):
         return test_utils.flatten_list(
-            param_trait.get_metric_names(param_name) for param_trait,
-            param_name in zip(self._param_traits, self._param_names))
+            param_trait.get_metric_names(param_name)
+            for param_trait, param_name in zip(self._param_traits, self._param_names)
+        )
 
     def calculate_metrics(self, params):
         return test_utils.flatten_list(
             param_trait.get_metrics(param)
-            for param_trait, param in zip(self._param_traits, params))
+            for param_trait, param in zip(self._param_traits, params)
+        )
 
     def expected_is_void(self):
         return self._ret_value_trait.is_void()

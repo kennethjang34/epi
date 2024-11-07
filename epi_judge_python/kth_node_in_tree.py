@@ -14,10 +14,47 @@ class BinaryTreeNode:
         self.size = size
 
 
-def find_kth_node_binary_tree(tree: BinaryTreeNode,
-                              k: int) -> Optional[BinaryTreeNode]:
-    # TODO - you fill in here.
+# TC: O(h), SC: O(h)
+def recursive(tree: BinaryTreeNode, k: int) -> Optional[BinaryTreeNode]:
+    if tree is None or k < 1:
+        return None
+    if tree.left is None:
+        if k == 1:
+            return tree
+        else:
+            return find_kth_node_binary_tree(tree.right, k - 1)
+    else:
+        left_size = tree.left.size
+        if left_size >= k:
+            return find_kth_node_binary_tree(tree.left, k)
+        elif left_size + 1 == k:
+            return tree
+        else:
+            return find_kth_node_binary_tree(tree.right, k - left_size - 1)
+
+
+# TC: O(h), SC: O(1)
+def iterative(tree: BinaryTreeNode, k: int) -> Optional[BinaryTreeNode]:
+    if tree is None or k < 1:
+        return None
+    while tree:
+        # the following condition does not work as inorder traversal visites left subtree before current root!
+        # if k == 1:
+        #     return tree
+        left_size = tree.left.size if tree.left else 0
+        if left_size >= k:
+            tree = tree.left
+        elif left_size + 1 == k:
+            return tree
+        else:
+            tree = tree.right
+            k = k - left_size - 1
     return None
+
+
+def find_kth_node_binary_tree(tree: BinaryTreeNode, k: int) -> Optional[BinaryTreeNode]:
+    # return recursive(tree, k)
+    return iterative(tree, k)
 
 
 @enable_executor_hook
@@ -30,16 +67,18 @@ def find_kth_node_binary_tree_wrapper(executor, tree, k):
 
     init_size(tree)
 
-    result = executor.run(functools.partial(find_kth_node_binary_tree, tree,
-                                            k))
+    result = executor.run(functools.partial(find_kth_node_binary_tree, tree, k))
 
     if not result:
-        raise TestFailure('Result can\'t be None')
+        raise TestFailure("Result can't be None")
     return result.data
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(
-        generic_test.generic_test_main('kth_node_in_tree.py',
-                                       'kth_node_in_tree.tsv',
-                                       find_kth_node_binary_tree_wrapper))
+        generic_test.generic_test_main(
+            "kth_node_in_tree.py",
+            "kth_node_in_tree.tsv",
+            find_kth_node_binary_tree_wrapper,
+        )
+    )

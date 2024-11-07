@@ -8,10 +8,12 @@ def find_anagrams(dictionary: List[str]) -> List[List[str]]:
     return []
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exit(
         generic_test.generic_test_main(
-            'anagrams.py',
-            'anagrams.tsv',
+            "anagrams.py",
+            "anagrams.tsv",
             find_anagrams,
-            comparator=test_utils.unordered_compare))
+            comparator=test_utils.unordered_compare,
+        )
+    )

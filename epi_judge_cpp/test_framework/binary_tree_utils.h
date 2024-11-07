@@ -16,11 +16,11 @@
 
 namespace test_framework {
 template <typename NodePtr>
-decltype(auto) GeneratePreorder(const NodePtr& tree) {
+decltype(auto) GeneratePreorder(const NodePtr &tree) {
   using node_t = template_param_by_index_t<NodePtr, 0>;
   using key_t = template_param_by_index_t<NodePtr, 0, 0>;
   std::vector<key_t> result;
-  std::stack<const node_t*> s{{GetRawPtr(tree)}};
+  std::stack<const node_t *> s{{GetRawPtr(tree)}};
 
   while (!s.empty()) {
     auto node = s.top();
@@ -38,11 +38,11 @@ decltype(auto) GeneratePreorder(const NodePtr& tree) {
 }
 
 template <typename NodePtr>
-decltype(auto) GenerateInorder(const NodePtr& tree) {
+decltype(auto) GenerateInorder(const NodePtr &tree) {
   using node_t = template_param_by_index_t<NodePtr, 0>;
   using key_t = template_param_by_index_t<NodePtr, 0, 0>;
   std::vector<key_t> result;
-  std::stack<const node_t*> s{{GetRawPtr(tree)}};
+  std::stack<const node_t *> s{{GetRawPtr(tree)}};
   bool initial = true;
 
   if (!tree) {
@@ -70,11 +70,11 @@ decltype(auto) GenerateInorder(const NodePtr& tree) {
 }
 
 template <typename NodePtr>
-decltype(auto) GeneratePostorder(const NodePtr& tree) {
+decltype(auto) GeneratePostorder(const NodePtr &tree) {
   using node_t = template_param_by_index_t<NodePtr, 0>;
   using key_t = template_param_by_index_t<NodePtr, 0, 0>;
   std::vector<key_t> result;
-  std::stack<const node_t*> s{{&tree}};
+  std::stack<const node_t *> s{{&tree}};
 
   while (!s.empty()) {
     auto node = s.top();
@@ -94,8 +94,8 @@ decltype(auto) GeneratePostorder(const NodePtr& tree) {
 }
 
 template <typename NodePtr, typename Key>
-const NodePtr* FindNode(const NodePtr* tree, Key& val) {
-  std::stack<const NodePtr*> s{{tree}};
+const NodePtr *FindNode(const NodePtr *tree, Key &val) {
+  std::stack<const NodePtr *> s{{tree}};
 
   while (!s.empty()) {
     auto node = s.top();
@@ -117,7 +117,7 @@ const NodePtr* FindNode(const NodePtr* tree, Key& val) {
 }
 
 template <typename NodePtr, typename Key>
-NodePtr& MustFindNode(NodePtr& tree, Key& data) {
+NodePtr &MustFindNode(NodePtr &tree, Key &data) {
   auto result = FindNode(&tree, data);
   if (!result) {
     throw std::runtime_error(FmtStr("{} was not found in the tree", data));
@@ -126,10 +126,10 @@ NodePtr& MustFindNode(NodePtr& tree, Key& data) {
 };
 
 template <typename NodePtr1, typename NodePtr2>
-bool EqualBinaryTrees(const NodePtr1& tree1, const NodePtr2& tree2) {
+bool EqualBinaryTrees(const NodePtr1 &tree1, const NodePtr2 &tree2) {
   using node1_t = template_param_by_index_t<NodePtr1, 0>;
   using node2_t = template_param_by_index_t<NodePtr2, 0>;
-  std::stack<std::pair<const node1_t*, const node2_t*>> s{
+  std::stack<std::pair<const node1_t *, const node2_t *>> s{
       {{GetRawPtr(tree1), GetRawPtr(tree2)}}};
 
   while (!s.empty()) {
@@ -153,11 +153,11 @@ bool EqualBinaryTrees(const NodePtr1& tree1, const NodePtr2& tree2) {
 }
 
 template <typename NodePtr>
-std::string BinaryTreeToString(const NodePtr& tree) {
+std::string BinaryTreeToString(const NodePtr &tree) {
   using node_t = template_param_by_index_t<NodePtr, 0>;
   std::stringstream result;
-  std::queue<const node_t*> nodes;
-  std::unordered_set<const node_t*> visited;
+  std::queue<const node_t *> nodes;
+  std::unordered_set<const node_t *> visited;
   bool first = true;
   int null_nodes_pending = 0;
 
@@ -198,10 +198,9 @@ std::string BinaryTreeToString(const NodePtr& tree) {
   return result.str();
 }
 
-template <typename NodePtr>
-int BinaryTreeHeight(const NodePtr& tree) {
+template <typename NodePtr> int BinaryTreeHeight(const NodePtr &tree) {
   using node_t = template_param_by_index_t<NodePtr, 0>;
-  std::stack<std::pair<const node_t*, int>> s{{{GetRawPtr(tree), 1}}};
+  std::stack<std::pair<const node_t *, int>> s{{{GetRawPtr(tree), 1}}};
   int height = 0;
 
   while (!s.empty()) {
@@ -219,10 +218,9 @@ int BinaryTreeHeight(const NodePtr& tree) {
   return height;
 }
 
-template <typename NodePtr>
-int BinaryTreeSize(const NodePtr& tree) {
+template <typename NodePtr> int BinaryTreeSize(const NodePtr &tree) {
   using node_t = template_param_by_index_t<NodePtr, 0>;
-  std::stack<const node_t*> s{{GetRawPtr(tree)}};
+  std::stack<const node_t *> s{{GetRawPtr(tree)}};
   int size = 0;
 
   while (!s.empty()) {
@@ -238,6 +236,6 @@ int BinaryTreeSize(const NodePtr& tree) {
   }
   return size;
 }
-}  // namespace test_framework
+} // namespace test_framework
 
 using test_framework::MustFindNode;
